@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlacementPrep AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Sora:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060B1A;--tx:#EEF2FF;--mu:#9AA7C7;--a:#3B82F6;--b:#6366F1;--c:#22D3EE;--g:linear-gradient(120deg,#3B82F6,#6366F1);--gl:rgba(255,255,255,.05);--ln:rgba(255,255,255,.12)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:'Sora',system-ui,sans-serif;background:radial-gradient(1100px 700px at 10% -10%,#102357 0%,transparent 60%),radial-gradient(900px 600px at 100% 5%,#1B1658 0%,transparent 55%),var(--bg);color:var(--tx);line-height:1.65;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.55) 100%)}
+body::after{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.06;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+h1,h2,h3,.logo{font-family:'Unbounded',sans-serif;line-height:1.15}
+a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+#bg{position:fixed;inset:0;z-index:0}
+#spot{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(420px circle at var(--mx,50%) var(--my,30%),rgba(59,130,246,.18),transparent 70%)}
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;border-radius:50%;filter:blur(100px);mix-blend-mode:screen;opacity:.35;animation:drift 16s ease-in-out infinite}
+.aurora i:nth-child(1){width:420px;height:420px;background:var(--a);top:5%;left:-8%}
+.aurora i:nth-child(2){width:380px;height:380px;background:var(--b);top:40%;right:-6%;animation-delay:-5s}
+.aurora i:nth-child(3){width:340px;height:340px;background:var(--c);bottom:-8%;left:35%;animation-delay:-9s;opacity:.22}
+@keyframes drift{50%{transform:translate(60px,-50px) scale(1.15)}}
+#prog{position:fixed;top:0;left:0;height:3px;width:0;z-index:70;background:linear-gradient(90deg,var(--a),var(--c))}
+main,nav,footer,aside{position:relative;z-index:4}
+svg.i{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;gap:16px;padding:12px 24px;background:rgba(6,11,26,.6);backdrop-filter:blur(14px);border-bottom:1px solid var(--ln)}
+.menu{width:42px;height:42px;border-radius:12px;border:1px solid var(--ln);background:var(--gl);color:var(--tx);font-size:20px}
+.logo{font-weight:800;font-size:1.05rem;margin-right:auto;letter-spacing:-.01em}
+.logo em{font-style:normal;margin-left:8px;padding:3px 9px;border-radius:8px;font-size:.7rem;background:var(--g)}
+nav .links{display:flex;gap:4px}
+nav .links a{padding:8px 14px;border-radius:999px;color:var(--mu);transition:.25s}
+nav .links a:hover{color:#fff;background:var(--gl)}
+.btn{border:0;border-radius:999px;padding:11px 22px;font-weight:700;transition:transform .2s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px)}
+.ghost{background:transparent;border:1px solid var(--ln);color:var(--tx)}
+.hot{background:var(--g);color:#fff;box-shadow:0 8px 28px rgba(59,130,246,.35)}
+.hot:hover{box-shadow:0 12px 38px rgba(99,102,241,.55)}
+
+aside{position:fixed;top:0;left:0;bottom:0;width:300px;z-index:60;background:rgba(8,13,36,.94);backdrop-filter:blur(18px);border-right:1px solid var(--ln);padding:22px;transform:translateX(-100%);transition:transform .4s cubic-bezier(.2,.8,.2,1);overflow:auto}
+aside.open{transform:none;box-shadow:30px 0 80px rgba(0,0,0,.6)}
+aside h4{margin:24px 0 8px;font-size:.85rem;color:var(--mu);font-weight:500}
+aside .item{padding:11px 13px;border-radius:14px;background:var(--gl);border:1px solid var(--ln);margin-bottom:8px;font-size:.9rem}
+aside .item small{display:block;color:var(--mu)}
+.x{float:right;border:0;background:none;color:#fff;font-size:24px}
+
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding:130px 24px 90px;position:relative;overflow:hidden}
+.floor{position:absolute;left:-20%;right:-20%;bottom:-6%;height:46%;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(59,130,246,.4) 1px,transparent 1px) 0 0/70px 70px,linear-gradient(rgba(59,130,246,.4) 1px,transparent 1px) 0 0/70px 70px;transform:perspective(450px) rotateX(62deg);animation:move 2.4s linear infinite;-webkit-mask-image:linear-gradient(transparent,#000 70%);mask-image:linear-gradient(transparent,#000 70%)}
+@keyframes move{to{background-position:0 0,0 70px}}
+.hero-in{position:relative;z-index:2;max-width:940px}
+.pill{display:inline-flex;gap:8px;align-items:center;background:var(--gl);border:1px solid var(--ln);padding:7px 18px;border-radius:999px;color:var(--mu);font-size:.9rem;margin-bottom:26px}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{transform:scale(1.6);opacity:.5}}
+.hero h1{font-size:clamp(2.1rem,6vw,4.5rem);font-weight:800;letter-spacing:-.03em;text-shadow:0 0 50px rgba(59,130,246,.5)}
+.hero h1 .w{display:inline-block;opacity:0;transform:translateY(50px) scale(.9);filter:blur(10px);animation:rise .8s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none;filter:none}}
+.rot{margin:22px 0 8px;font-size:clamp(1.1rem,2.6vw,1.5rem);color:var(--mu)}
+#typed{font-weight:700;background:linear-gradient(90deg,#60A5FA,var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cur{display:inline-block;width:3px;height:1.2em;background:var(--c);vertical-align:-.2em;margin-left:3px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.sub{max-width:600px;margin:0 auto 34px;color:var(--mu)}
+.search{display:flex;align-items:center;gap:8px;max-width:700px;margin:0 auto;padding:8px 8px 8px 10px;border-radius:999px;border:2px solid transparent;background:linear-gradient(#0B1233,#0B1233) padding-box,linear-gradient(90deg,var(--a),var(--c),var(--b),var(--a)) border-box;background-size:auto,300% 100%;animation:flow 6s linear infinite;box-shadow:0 0 50px rgba(59,130,246,.3)}
+@keyframes flow{to{background-position:0 0,300% 0}}
+.plus{width:46px;height:46px;flex:none;border-radius:50%;background:var(--gl);border:1px solid var(--ln);display:grid;place-items:center;font-size:26px;cursor:pointer;transition:.3s}
+.plus:hover{transform:rotate(90deg);background:var(--a)}
+.search input[type=text]{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--tx);font:inherit;font-size:1rem}
+.search input::placeholder{color:#6F7CA3}
+.chip{margin-top:18px;min-height:26px;color:var(--mu);font-size:.92rem}
+.chip b{color:var(--c)}
+.scroll{position:absolute;bottom:22px;left:50%;z-index:2;width:26px;height:44px;border:2px solid var(--ln);border-radius:14px}
+.scroll::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--c);animation:dot 1.6s infinite}
+@keyframes dot{to{transform:translateY(16px);opacity:0}}
+
+section{padding:90px 24px;max-width:1180px;margin:auto}
+.head{margin-bottom:40px}
+.head h2{font-size:clamp(1.6rem,3.8vw,2.6rem);font-weight:800;letter-spacing:-.02em}
+.head p{color:var(--mu);margin-top:12px;max-width:560px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px}
+.card{background:var(--gl);border:1px solid var(--ln);backdrop-filter:blur(10px);border-radius:22px;padding:28px;transition:transform .2s,border-color .3s,box-shadow .3s;transform-style:preserve-3d;will-change:transform}
+.card:hover{border-color:rgba(255,255,255,.3);box-shadow:0 24px 60px rgba(59,130,246,.22)}
+.ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:18px;color:#BFD3FF;background:linear-gradient(135deg,rgba(59,130,246,.3),rgba(34,211,238,.18));border:1px solid var(--ln)}
+.card h3{font-size:1.05rem;margin-bottom:10px}
+.card p{color:var(--mu);font-size:.94rem;margin-bottom:16px}
+.tag{font-weight:700;color:var(--c)}.tag:hover{color:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;text-align:center}
+.stat b{display:block;font-family:'Unbounded';font-size:clamp(2.3rem,5vw,3.4rem);font-weight:800;background:linear-gradient(120deg,#60A5FA,var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--mu)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;counter-reset:s}
+.step{padding:26px;border-radius:20px;border:1px solid var(--ln);background:var(--gl)}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;margin-bottom:14px;font-family:'Unbounded';font-weight:700;background:var(--g)}
+.step h3{font-size:.98rem;margin-bottom:6px}.step p{color:var(--mu);font-size:.92rem}
+
+.arena,.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:24px}
+.grid2{grid-template-columns:1fr 1fr;margin-top:24px}
+.game{background:linear-gradient(160deg,rgba(59,130,246,.2),rgba(99,102,241,.12));border:1px solid var(--ln);border-radius:26px;padding:28px;backdrop-filter:blur(12px)}
+.game .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--mu);margin-bottom:18px;font-size:.88rem}
+.game h3{font-size:1.1rem;margin-bottom:18px}
+.opt{display:block;width:100%;text-align:left;margin-bottom:10px;padding:13px 18px;border-radius:14px;border:1px solid var(--ln);background:rgba(6,11,26,.6);color:#fff;transition:.2s}
+.opt:hover:not(:disabled){transform:translateX(6px);border-color:var(--c)}
+.opt:disabled{opacity:.5;cursor:default}
+.opt.ok{background:#10B981;border-color:#10B981;animation:pop .4s}
+.opt.no{background:#EF4444;border-color:#EF4444;animation:shake .35s}
+@keyframes pop{50%{transform:scale(1.04)}}@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.row{display:flex;gap:10px;margin-bottom:12px}.row .opt{text-align:center;margin:0}
+.scr{font-size:1.8rem!important;letter-spacing:.25em;color:var(--c)}
+.game input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--ln);background:rgba(6,11,26,.6);color:#fff;font:inherit;margin:8px 0 12px;text-transform:uppercase}
+.game p.n{color:var(--mu);font-size:.92rem}
+.flip{perspective:900px;height:130px;margin-bottom:14px;cursor:pointer}
+.flip>div{position:relative;height:100%;transition:transform .65s;transform-style:preserve-3d}
+.flip.on>div{transform:rotateY(180deg)}
+.flip span{position:absolute;inset:0;backface-visibility:hidden;display:grid;place-items:center;text-align:center;padding:16px;border-radius:18px}
+.flip .f{background:var(--gl);border:1px solid var(--ln)}
+.flip .bk{background:var(--g);font-weight:700;transform:rotateY(180deg)}
+
+.marq{overflow:hidden;padding:44px 0;max-width:none;border-block:1px solid var(--ln);background:rgba(255,255,255,.03);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.track{display:flex;gap:22px;width:max-content;animation:scroll 40s linear infinite}
+.marq:hover .track{animation-play-state:paused}
+.co{display:flex;align-items:center;gap:10px;height:62px;padding:0 22px;border-radius:16px;background:#F4F6FC;color:#0B1233;font-weight:700;white-space:nowrap;transition:transform .25s,box-shadow .25s}
+.co:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(59,130,246,.35)}
+.co i{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;color:#fff;font:800 .95rem 'Unbounded',sans-serif;font-style:normal}
+.co img{height:36px;max-width:140px;object-fit:contain}
+@keyframes scroll{to{transform:translateX(-50%)}}
+
+footer{padding:80px 24px 30px;background:linear-gradient(transparent,rgba(0,0,0,.55));border-top:1px solid var(--ln)}
+.fin{max-width:1180px;margin:auto;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:40px}
+footer h3{margin-bottom:14px;font-size:1rem}footer p,footer a{color:var(--mu)}
+footer a{display:block;margin-bottom:8px}footer a:hover{color:var(--c)}
+footer textarea{width:100%;padding:13px;border-radius:14px;border:1px solid var(--ln);background:var(--gl);color:#fff;font:inherit;margin-bottom:10px}
+.copy{max-width:1180px;margin:44px auto 0;padding-top:22px;border-top:1px solid var(--ln);color:var(--mu);font-size:.88rem}
+
+.modal{position:fixed;inset:0;z-index:80;background:rgba(3,6,18,.7);backdrop-filter:blur(6px);display:none;place-items:center;padding:20px}
+.modal.show{display:grid}
+.box{background:#0B1233;border:1px solid var(--ln);border-radius:24px;padding:32px;width:min(400px,100%);animation:rise .4s forwards}
+.box input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--ln);background:var(--gl);color:#fff;margin:6px 0 14px;font:inherit}
+
+.rv{opacity:0;transform:translateY(40px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media(max-width:860px){nav .links{display:none}.arena,.grid2,.fin{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,.hero h1 .w{opacity:1;transform:none;filter:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></symbol>
+ <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></symbol>
+ <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></symbol>
+ <symbol id="i-test" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></symbol>
+ <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+ <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></symbol>
+</svg>
+<div class="aurora"><i></i><i></i><i></i></div>
+<canvas id="bg"></canvas><div id="spot"></div><div id="prog"></div>
+
+<aside id="side" aria-label="Sidebar">
+  <button class="x" onclick="toggleSide()" aria-label="Close">&times;</button>
+  <div class="logo">PlacementPrep<em>AI</em></div>
+  <button class="btn hot" style="width:100%;margin-top:20px">+ New chat</button>
+  <h4>Conversations</h4>
+  <div class="item">What is normalization?<small>Today · DBMS</small></div>
+  <div class="item">Explain ER modeling<small>Yesterday · DBMS</small></div>
+  <div class="item">Binary search basics<small>2 days ago · DSA</small></div>
+  <h4>Project details</h4>
+  <div class="item"><b>PlacementPrep AI</b><small>RAG assistant · Python, ChromaDB, Gemini</small></div>
+  <div class="item"><b>Notes uploaded</b><small>1 PDF · 796 chunks</small></div>
+  <div class="item"><b>Mock tests taken</b><small>None yet. Take your first one.</small></div>
+</aside>
+
+<nav>
+  <button class="menu" onclick="toggleSide()" aria-label="Open menu">☰</button>
+  <a class="logo" href="#top">PlacementPrep<em>AI</em></a>
+  <div class="links"><a href="#practice">Aptitude</a><a href="#practice">Reasoning</a><a href="#practice">DSA</a><a href="#arena">Games</a></div>
+  <button class="btn ghost" onclick="openM('Login')">Login</button>
+  <button class="btn hot" onclick="openM('Sign up')">Sign up</button>
+</nav>
+
+<main>
+<header class="hero" id="top">
+  <div class="floor"></div>
+  <div class="hero-in">
+    <div class="pill">Your notes. Your interview.</div>
+    <h1 id="slogan">Your dream offer starts with today's practice.</h1>
+    <p class="rot">Practise <span id="typed"></span><i class="cur"></i></p>
+    <p class="sub">Every topper you admire once froze in an interview. Upload your notes, ask anything, and practise until the questions feel easy.</p>
+    <form class="search" onsubmit="return doSearch(event)">
+      <label class="plus" title="Upload notes (PDF)" for="file">+</label>
+      <input id="file" type="file" accept=".pdf,.txt,.docx" hidden onchange="fileChosen(this)">
+      <input type="text" id="q" placeholder="Ask anything from your notes..." aria-label="Search">
+      <button class="btn hot" type="submit">Search</button>
+    </form>
+    <div class="chip" id="chip"></div>
+  </div>
+  <div class="scroll"></div>
+</header>
+
+<section>
+  <div class="stats rv">
+    <div class="stat"><b data-n="6">0</b><span>Practice modes</span></div>
+    <div class="stat"><b data-n="12">0</b><span>Company tracks</span></div>
+    <div class="stat"><b data-n="3">0</b><span>Skill areas</span></div>
+    <div class="stat"><b data-n="24">0</b><span>Hours a day, always open</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="head rv"><h2>From notes to offer letter</h2><p>Four steps, and you can start right now.</p></div>
+  <div class="steps rv">
+    <div class="step"><h3>Upload your notes</h3><p>Add a PDF from your class or your own study material.</p></div>
+    <div class="step"><h3>Ask questions</h3><p>Get answers that come only from your notes, with sources.</p></div>
+    <div class="step"><h3>Practise and play</h3><p>Quizzes, games, mock tests and mock interviews.</p></div>
+    <div class="step"><h3>Walk in ready</h3><p>Revise weak topics and go to your interview with confidence.</p></div>
+  </div>
+</section>
+
+<section id="practice">
+  <div class="head rv"><h2>Practise what companies actually ask</h2><p>Pick a topic, learn it, then test yourself.</p></div>
+  <div class="grid">
+    <div class="card rv" data-tilt><div class="ic"><svg class="i"><use href="#i-calc"/></svg></div><h3>Aptitude</h3><p>Percentages, time and work, ratios and more, with shortcuts.</p><a class="tag" href="#">Start practising</a></div>
+    <div class="card rv" data-tilt><div class="ic"><svg class="i"><use href="#i-bulb"/></svg></div><h3>Reasoning</h3><p>Series, puzzles, seating arrangements and logical deduction.</p><a class="tag" href="#">Start practising</a></div>
+    <div class="card rv" data-tilt><div class="ic"><svg class="i"><use href="#i-code"/></svg></div><h3>DSA</h3><p>Arrays to graphs, with the patterns interviewers love.</p><a class="tag" href="#">Start practising</a></div>
+  </div>
+</section>
+
+<section id="arena">
+  <div class="head rv"><h2>Play, practise, repeat</h2><p>Four games for quick revision, and full-length practice when you are ready.</p></div>
+  <div class="arena rv">
+    <div class="game">
+      <div class="top"><span>Game 1 · Quiz Rush</span><span>Score <b id="score">0</b> · Q <b id="qn">1</b>/5</span></div>
+      <h3 id="qtext"></h3><div id="opts"></div>
+    </div>
+    <div>
+      <p style="margin-bottom:12px;font-weight:700">Game 2 · Flip and Recall (tap a card)</p>
+      <div class="flip" onclick="this.classList.toggle('on')"><div><span class="f">Which join returns only matching rows?</span><span class="bk">INNER JOIN</span></div></div>
+      <div class="flip" onclick="this.classList.toggle('on')"><div><span class="f">Time complexity of binary search?</span><span class="bk">O(log n)</span></div></div>
+      <div class="flip" onclick="this.classList.toggle('on')"><div><span class="f">What does ACID stand for?</span><span class="bk">Atomicity, Consistency, Isolation, Durability</span></div></div>
+    </div>
+  </div>
+  <div class="grid2 rv">
+    <div class="game">
+      <div class="top"><span>Game 3 · True or False Blitz</span><span>Score <b id="bs">0</b> · Time <b id="bt">30</b>s</span></div>
+      <h3 id="bq">Judge as many statements as you can in 30 seconds.</h3>
+      <div class="row"><button class="opt" id="bT" onclick="bAns(true)" disabled>True</button><button class="opt" id="bF" onclick="bAns(false)" disabled>False</button></div>
+      <button class="btn hot" id="bgo" onclick="bStart()">Start</button>
+    </div>
+    <div class="game">
+      <div class="top"><span>Game 4 · Word Unscramble</span><span id="um">Score: 0</span></div>
+      <h3 class="scr" id="uw"></h3>
+      <p class="n" id="uh"></p>
+      <form onsubmit="uCheck(event)"><input id="uin" placeholder="Type the word" autocomplete="off" aria-label="Answer">
+      <div class="row"><button class="btn hot" style="flex:1">Check</button><button type="button" class="btn ghost" style="flex:1" onclick="uSkip()">Skip</button></div></form>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:24px">
+    <div class="card rv" data-tilt><div class="ic"><svg class="i"><use href="#i-test"/></svg></div><h3>Mock Test</h3><p>Timed tests with score and topic-wise analysis.</p><a class="tag" href="#">Take a test</a></div>
+    <div class="card rv" data-tilt><div class="ic"><svg class="i"><use href="#i-mic"/></svg></div><h3>Mock Interview</h3><p>Answer questions from your own notes and get feedback.</p><a class="tag" href="#">Start interview</a></div>
+    <div class="card rv" data-tilt><div class="ic"><svg class="i"><use href="#i-cap"/></svg></div><h3>Training</h3><p>A step-by-step plan from basics to placement day.</p><a class="tag" href="#">See the plan</a></div>
+  </div>
+</section>
+
+<section class="marq">
+  <div class="head rv" style="text-align:center;padding:0 24px"><h2 style="font-size:1.3rem">Prepare for teams hiring across India</h2></div>
+  <div class="track" id="track"></div>
+</section>
+</main>
+
+<footer>
+  <div class="fin">
+    <div><h3 class="logo">PlacementPrep<em>AI</em></h3><p style="margin-top:12px">Built by a student, for students. Practise smarter and walk into your interview ready.</p></div>
+    <div><h3>Contact</h3><a href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a><a href="mailto:youremail@gmail.com">youremail@gmail.com</a></div>
+    <div><h3>Feedback</h3>
+      <form onsubmit="return fb(event)"><textarea rows="3" placeholder="Tell us how to improve" required></textarea><button class="btn hot">Send feedback</button></form>
+      <p id="fbmsg" style="margin-top:8px"></p></div>
+  </div>
+  <div class="copy">© 2026 PlacementPrep AI. All rights reserved.</div>
+</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeM()">
+  <form class="box" onsubmit="event.preventDefault();closeM()">
+    <h3 id="mt" style="font-size:1.3rem;margin-bottom:14px">Login</h3>
+    <label>Email<input type="email" required></label>
+    <label>Password<input type="password" required></label>
+    <button class="btn hot" style="width:100%">Continue</button>
+  </form>
+</div>
+
+<script>
+const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+// Hero slogan reveal
+const s=$('slogan');s.innerHTML=s.textContent.split(' ').map((w,i)=>`<span class="w" style="animation-delay:${.2+i*.1}s">${w}</span>`).join(' ');
+// Typing line
+const P=['Aptitude daily','Reasoning puzzles','DSA patterns','Mock interviews'];let pi=0,ci=0,del=false;
+(function type(){const w=P[pi];$('typed').textContent=w.slice(0,ci);
+  if(!del&&ci===w.length){del=true;return setTimeout(type,1400)}
+  if(del&&ci===0){del=false;pi=(pi+1)%P.length}
+  ci+=del?-1:1;setTimeout(type,del?40:85)})();
+// Sidebar, modal
+const toggleSide=()=>$('side').classList.toggle('open');
+const openM=t=>{$('mt').textContent=t;$('modal').classList.add('show')};
+const closeM=()=>$('modal').classList.remove('show');
+// Upload + search (front-end only; connect your backend here)
+function fileChosen(i){$('chip').innerHTML=i.files[0]?`Selected: <b>${i.files[0].name}</b>`:''}
+function doSearch(e){e.preventDefault();const q=$('q').value.trim();
+  $('chip').innerHTML=q?`Searching your notes for <b>${q}</b>... (connect your backend to show the answer here)`:'Type a question first.';return false}
+
+// Company logos. Put real logo files in a "logos" folder (tcs.png, infosys.png ...).
+// If a file is missing, a clean monogram badge is shown instead.
+const cos=[['TCS','tcs','#1F4E9C'],['Infosys','infosys','#007CC3'],['Wipro','wipro','#5B2D8E'],['Zoho','zoho','#C8102E'],['Cognizant','cognizant','#1A4CA1'],['Accenture','accenture','#7A1FD6'],['HCL','hcl','#0F5BA7'],['Capgemini','capgemini','#0070AD'],['Amazon','amazon','#232F3E'],['Microsoft','microsoft','#0A7EC2'],['Google','google','#4285F4'],['Freshworks','freshworks','#1F8F5F']];
+function coEl([n,f,c]){const d=document.createElement('div');d.className='co';d.innerHTML=`<i style="background:${c}">${n[0]}</i><span>${n}</span>`;
+  const im=new Image();im.alt=n;im.onload=()=>{d.innerHTML='';d.appendChild(im)};im.src=`logos/${f}.png`;return d}
+[...cos,...cos].forEach(c=>$('track').appendChild(coEl(c)));
+
+// Game 1: Quiz Rush
+const Q=[['Which data structure uses FIFO order?',['Stack','Queue','Tree','Graph'],1],['Which SQL keyword removes duplicate rows?',['UNIQUE','DISTINCT','GROUP','LIMIT'],1],['Worst-case time of linear search?',['O(1)','O(log n)','O(n)','O(n²)'],2],['Which normal form removes partial dependency?',['1NF','2NF','3NF','BCNF'],1],['What does encapsulation mean in OOP?',['Hiding data inside a class','Reusing a class','Many forms','Looping'],0]];
+let qi=0,sc=0;
+function showQ(){
+  if(qi>=Q.length){$('qtext').textContent=`Done. You scored ${sc}/${Q.length}.`;$('opts').innerHTML='<button class="opt" onclick="qi=0;sc=0;showQ()">Play again</button>';return}
+  const [t,o]=Q[qi];$('qtext').textContent=t;$('qn').textContent=qi+1;$('score').textContent=sc;
+  $('opts').innerHTML=o.map((x,i)=>`<button class="opt" onclick="pick(this,${i})">${x}</button>`).join('')}
+function pick(b,i){const ok=i===Q[qi][2];b.classList.add(ok?'ok':'no');if(ok)sc++;document.querySelectorAll('#opts .opt').forEach(x=>x.disabled=true);setTimeout(()=>{qi++;showQ()},800)}
+showQ();
+
+// Game 3: True or False Blitz
+const B=[['A stack follows FIFO order.',false],['Binary search needs sorted data.',true],['A PRIMARY KEY can contain NULL values.',false],['A queue follows FIFO order.',true],['Quick sort worst case is O(n log n).',false],['TCP is a connection-oriented protocol.',true],['RAM is non-volatile memory.',false],['A foreign key can refer to a primary key of another table.',true]];
+let bl=[],bi=0,bs=0,bt=30,bTimer;
+const bBtn=on=>{$('bT').disabled=$('bF').disabled=!on};
+function bStart(){bl=shuffle(B);bi=0;bs=0;bt=30;$('bs').textContent=0;$('bt').textContent=30;$('bgo').style.display='none';bBtn(true);$('bq').textContent=bl[0][0];
+  bTimer=setInterval(()=>{$('bt').textContent=--bt;if(bt<=0)bEnd()},1000)}
+function bAns(v){if(v===bl[bi%bl.length][1])$('bs').textContent=++bs;bi++;$('bq').textContent=bl[bi%bl.length][0]}
+function bEnd(){clearInterval(bTimer);bBtn(false);$('bq').textContent=`Time is up. You scored ${bs}.`;$('bgo').textContent='Play again';$('bgo').style.display=''}
+
+// Game 4: Word Unscramble
+const U=[['ALGORITHM','Step-by-step procedure to solve a problem'],['DATABASE','Organised collection of data'],['POINTER','Variable that stores a memory address'],['RECURSION','A function calling itself'],['COMPILER','Translates source code to machine code'],['INHERITANCE','A class acquiring properties of another class']];
+let ul=shuffle(U),ui=0,us=0;
+function uShow(){const w=ul[ui%ul.length][0];let x;do{x=shuffle([...w]).join('')}while(x===w);$('uw').textContent=x;$('uh').textContent='Hint: '+ul[ui%ul.length][1];$('uin').value=''}
+function uCheck(e){e.preventDefault();if($('uin').value.trim().toUpperCase()===ul[ui%ul.length][0]){$('um').textContent='Score: '+(++us);ui++;uShow()}else $('uh').textContent='Not quite. Try again or skip.'}
+function uSkip(){ui++;uShow()}
+uShow();
+
+// Reveal + counters
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');
+  e.target.querySelectorAll('[data-n]').forEach(c=>{const n=+c.dataset.n;let v=0;const t=setInterval(()=>{c.textContent=++v;if(v>=n)clearInterval(t)},1400/n)});io.unobserve(e.target)}),{threshold:.2});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+function fb(e){e.preventDefault();$('fbmsg').textContent='Thanks. Your feedback was received.';e.target.reset();return false}
+// Scroll progress, spotlight, 3D tilt
+addEventListener('scroll',()=>{$('prog').style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%'});
+const sp=$('spot');let mx=innerWidth/2,my=innerHeight/3;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;sp.style.setProperty('--mx',mx+'px');sp.style.setProperty('--my',my+'px')});
+if(!RM)document.querySelectorAll('[data-tilt]').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(700px) rotateY(${x*12}deg) rotateX(${-y*12}deg) translateY(-6px)`});
+  c.addEventListener('mouseleave',()=>c.style.transform='')});
+// Particle network background
+const cv=$('bg'),cx=cv.getContext('2d');let W,H,pts=[];
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;pts=Array.from({length:Math.min(90,W/16|0)},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.8+.6}))}
+size();addEventListener('resize',size);
+(function draw(){cx.clearRect(0,0,W,H);
+  for(const p of pts){if(!RM){p.x+=p.vx;p.y+=p.vy}if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    const dx=mx-p.x,dy=my-p.y,d=Math.hypot(dx,dy);if(d<160&&!RM){p.x-=dx/d*.8;p.y-=dy/d*.8}
+    cx.fillStyle='rgba(165,190,255,.8)';cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()}
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<120){cx.strokeStyle=`rgba(99,140,255,${.28*(1-d/120)})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}
+  requestAnimationFrame(draw)})();
+</script>
+</body>
+</html>
